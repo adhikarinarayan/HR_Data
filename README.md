@@ -1,5 +1,7 @@
 # HR Analytics Dashboard
-Here I have craeated a Dashboard using the hrdata.csv in Tabaleau and then performed functional validation in SQL
+
+Here I have created a Dashboard using the hrdata.csv in Tabaleau and then performed functional validation in SQL.
+
 ---
 # Tabaleau
 Link of Tableau Dashboard
