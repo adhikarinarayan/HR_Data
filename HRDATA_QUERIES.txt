@@ -1,0 +1,84 @@
+-- Employee Count with education,department,age band etc.
+
+SELECT sum(employee_count) AS employee_count
+FROM HRDATA
+-- WHERE education = 'High School'
+-- WHERE department = 'Sales'
+WHERE age_band = 'Under 25'
+
+
+-- Employee Count with education,department,age band etc.
+SELECT COUNT(ATTRITION)
+FROM HRDATA
+--WHERE ATTRITION = 'Yes' and education = 'Doctoral Degree'
+--WHERE ATTRITION = 'Yes' and department = 'R&D'
+WHERE ATTRITION = 'Yes' and education_field = 'Medical'
+
+
+-- attrition rate = attrition count/employee count FOR DIFFERENT CATEGORIES
+
+SELECT ROUND((SELECT COUNT(ATTRITION)
+FROM HRDATA
+WHERE ATTRITION = 'Yes'and department = 'Sales')/ SUM(EMPLOYEE_COUNT) *100,2) AS ATTRITION_RATE
+FROM HRDATA
+WHERE department = 'Sales'
+
+
+-- active employee = sum(employee_count) - attrition count with respet to other categories
+
+SELECT sum(employee_count) - (SELECT count(attrition) FROM hrdata WHERE attrition='Yes' 
+							  and gender='Male')
+AS active_employee
+FROM hrdata
+WHERE gender='Male'
+
+
+-- average age
+
+SELECT round(avg(age))
+AS average_age
+FROM hrdata
+--WHERE gender='Male'
+
+
+-- attrition by gender
+
+SELECT gender, COUNT(ATTRITION)
+FROM HRDATA
+WHERE ATTRITION = 'Yes'
+GROUP BY gender
+
+-- departmentwise attrition(in percentage)
+
+SELECT department,count(attrition),ROUND((CAST(count(attrition)AS NUMERIC)/(SELECT count(attrition) FROM HRDATA
+WHERE ATTRITION = 'Yes'))*100,2)
+FROM HRDATA
+WHERE ATTRITION = 'Yes'
+GROUP BY department
+ORDER BY count(attrition) desc
+
+-- NUMBER OF EMPLOYEES BY AGEGROUP
+SELECT age,sum(employee_count)
+FROM hrdata
+WHERE department='R&D'
+GROUP BY age
+ORDER BY age
+
+-- EDUCATIION FILED WISE ATTRITION: EDUCATION WITH RESPECT TO ATTRITION COUNT
+
+select education_field, count(attrition) as attrition_count from hrdata
+where attrition='Yes'
+group by education_field
+order by count(attrition) desc;
+	
+
+-- attrition rate by gender for different age group
+SELECT age_band,gender,count(attrition),ROUND((CAST(count(attrition) AS NUMERIC)/
+											   (SELECT count(attrition) FROM HRDATA
+														  WHERE attrition = 'Yes'))*100,2)
+FROM hrdata
+WHERE attrition='Yes' --and department = 'Sales'
+GROUP BY age_band,gender
+ORDER BY age_band,gender desc
+
+
